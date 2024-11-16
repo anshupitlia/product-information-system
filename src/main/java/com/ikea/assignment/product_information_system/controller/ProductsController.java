@@ -2,6 +2,7 @@ package com.ikea.assignment.product_information_system.controller;
 
 import com.ikea.assignment.product_information_system.model.Country;
 import com.ikea.assignment.product_information_system.model.Product;
+import com.ikea.assignment.product_information_system.producers.ProductPriceUpdateProducer;
 import com.ikea.assignment.product_information_system.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,30 +17,17 @@ import java.util.List;
 public class ProductsController {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private ProductPriceUpdateProducer productPriceUpdateProducer;
 
-    private Product faltuSetup() {
-        Product product = new Product();
-        product.setSku("1");
-        product.setTitle("Title");
-        product.setPrice(BigDecimal.TEN);
-        product.setCountry(Country.EU);
-        product.setDiscountPercentage(2.0);
-        product.setImageUrl("https://assets.dummyjson.com/public/qr-code.png");
-        return product;
-    }
     @GetMapping
     public List<Product> getProducts() {
-        Product product = faltuSetup();
-        List<Product> products = new ArrayList<>();
-        products.add(product);
-        return products;
-        //return productRepository.findAll();
+        return productRepository.findAll();
     }
 
     @GetMapping(value="/{sku}")
     public Product getProduct(@PathVariable String sku) {
-        return faltuSetup();
-        //return productRepository.findById(sku).orElseThrow(RuntimeException::new);
+        return productRepository.findById(sku).orElseThrow(RuntimeException::new);
     }
 
     @PutMapping("/{sku}")
@@ -49,7 +37,9 @@ public class ProductsController {
         currentProduct.setPrice(product.getPrice());
         currentProduct.setDiscountPercentage(product.getDiscountPercentage());
         System.out.println("This product will be saved" + currentProduct.toString());
+        //do in a transaction
         Product newProduct = productRepository.save(currentProduct);
+        productPriceUpdateProducer.send(currentProduct, newProduct);
 
         return ResponseEntity.ok(newProduct);
     }
