@@ -41,3 +41,5 @@ src/main/resources/application.properties
 src/main/resources/client.truststore.jks
 src/main/resources/ca.pem
 
+.DS_Store
+

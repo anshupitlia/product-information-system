@@ -67,7 +67,7 @@ public class ProductsControllerTest {
         given(productsService.getAllProducts()).willReturn(products);
 
         // action
-        ResultActions response = mockMvc.perform(get("/products"));
+        ResultActions response = mockMvc.perform(get("/api/v1/products"));
 
         // verify the output
         response.andExpect(status().isOk())
@@ -85,7 +85,7 @@ public class ProductsControllerTest {
         given(productsService.getProductBy(product.getSku())).willReturn(product);
 
         // action
-        ResultActions response = mockMvc.perform(get("/products/{sku}", product.getSku()));
+        ResultActions response = mockMvc.perform(get("/api/v1/products/{sku}", product.getSku()));
 
         // verify
         response.andExpect(status().isOk())
@@ -105,7 +105,7 @@ public class ProductsControllerTest {
         given(productsService.update(any())).willReturn(product);
 
         // action
-        ResultActions response = mockMvc.perform(put("/products/{sku}", product.getSku())
+        ResultActions response = mockMvc.perform(put("/api/v1/products/{sku}", product.getSku())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(product)));
 

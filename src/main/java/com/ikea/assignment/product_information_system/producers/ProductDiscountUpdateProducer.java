@@ -2,14 +2,15 @@ package com.ikea.assignment.product_information_system.producers;
 
 import com.ikea.assignment.product_information_system.model.Product;
 import com.ikea.assignment.product_information_system.model.ProductDiscountUpdateEventData;
-import com.ikea.assignment.product_information_system.model.ProductPriceUpdateEventData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Service
 public class ProductDiscountUpdateProducer {
     @Autowired
     private KafkaTemplate<String, ProductDiscountUpdateEventData> kafkaTemplate;
